@@ -1,4 +1,5 @@
 /vendor/
 /.env
+/.idea
 /todo.txt
 /test*.php
