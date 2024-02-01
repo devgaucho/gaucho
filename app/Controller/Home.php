@@ -6,6 +6,6 @@ use Gaucho\Gaucho;
 class Home extends Gaucho
 {
     function GET(){
-        print 'hello';
+        print 'hello world';
     }
 }

@@ -12,13 +12,30 @@ class Route extends Gaucho
             $mix=require $filename;
             if(is_array($mix)){
                 $this->routes=$mix;
-                $this->run();
+                $this->autoRun();
             }else{
                 die('invalid '.$filename);
             }
         }else{
             die($filename.' not found');
         }
+    }
+    private function autoRun()
+    {
+        // identificar a rota
+        $rota=$this->dir(1);
+        // procurar no rotas.php
+        $rotaAtual=@$this->routes[$rota];
+        if(!$rotaAtual){
+            // caso a rota não exista procurar dinamicas
+            if(isset($this->routes['*'])){
+                $rotaAtual=$this->routes['*'];
+            }else{
+                $this->notFound();
+            }
+        }
+        // se a rota existe encaminhar pro controller
+        $this->controller($rotaAtual);
     }
     function controller($name) {
         $filename=ROOT.'/app/Controller/'.$name.'.php';
@@ -27,7 +44,7 @@ class Route extends Gaucho
         }else{
             die("controller ".$filename.' notFound');
         }
-        $nameWithNamespace='App\\Controller\\'.$name;
+        $nameWithNamespace='\App\Controller\\'.$name;
         if(!class_exists($nameWithNamespace)){
             die("class ".$nameWithNamespace.' not found');
         }
@@ -55,27 +72,9 @@ class Route extends Gaucho
         http_response_code(404);
         if(isset($this->routes['404'])){
             $rotaAtual=$this->routes['404'];
-            $this->controller($rotaAtual);
+            return $this->controller($rotaAtual);
         }else{
             die('not found');
         }
-    }
-    private function run()
-    {
-        // identificar a rota
-        $rota=$this->dir(1);
-        die(var_dump($rota));
-        // procurar no rotas.php
-        $rotaAtual=@$this->routes[$rota];
-        if(!$rotaAtual){
-            // caso a rota não exista procurar dinamicas
-            if(isset($this->routes['*'])){
-                $rotaAtual=$this->routes['*'];
-            }else{
-                $this->notFound();
-            }
-        }
-        // se a rota existe encaminhar pro controller
-        $this->controller($rotaAtual);
     }
 }

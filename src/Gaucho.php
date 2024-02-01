@@ -7,18 +7,6 @@ use Gaucho\Route;
 
 class Gaucho
 {
-    var $run;
-    function __construct()
-    {
-        if(!isset($this->run)){
-            $this->run=true;
-            new Env(ROOT.'/.env');
-            ini_set("memory_limit", $_ENV['SITE_MEMORY']);
-            $this->showErrors($_ENV['SITE_ERRORS']);
-            new Route(ROOT.'/routes.php');
-        }
-    }
-
     function chaplin($name,$data=[],$print=true){
         print $name;
     }
@@ -34,10 +22,31 @@ class Gaucho
         if($this->isCli()) {
             return false;
         }else{
-            $uri=$_SERVER["REQUEST_URI"];
-            $uri=explode('?',$uri)[0];
+            $uri=$this->getNormalUri();
             $dirs=explode('/',$uri);
+            $dirs=array_filter($dirs);
+            if(empty($dirs)){
+                return ['1'=>'/'];
+            }
             return $dirs;
+        }
+    }
+    function getNormalUri(){
+        $scheme=$_SERVER['REQUEST_SCHEME'];
+        $host=$_SERVER['HTTP_HOST'];
+        $uri=$_SERVER["REQUEST_URI"];
+        $uri=explode('?',$uri)[0];
+        $full=$scheme.'://'.$host.$uri;
+        $env=@$_ENV['SITE_URL'];
+        if($env){
+            $uri=explode($env,$full)[1];
+            if(empty($uri)){
+                return '/';
+            }else{
+                return $uri;
+            }
+        }else{
+            return $uri;
         }
     }
     function isCli(){
@@ -46,6 +55,13 @@ class Gaucho
         }else{
             return false;
         }
+    }
+    function run()
+    {
+        new Env(ROOT.'/.env');
+        ini_set("memory_limit", $_ENV['SITE_MEMORY']);
+        $this->showErrors($_ENV['SITE_ERRORS']);
+        new Route(ROOT.'/routes.php');
     }
     function showErrors($bool){
         if($bool){
