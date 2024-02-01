@@ -1,10 +1,10 @@
 <?php
-
 namespace Gaucho;
 
 use Gaucho\Chaplin;
 use Gaucho\Env;
 use Gaucho\Route;
+use Medoo\Medoo;
 
 class Gaucho
 {
@@ -13,9 +13,46 @@ class Gaucho
         $filename=ROOT.'/view/'.$name.'.html';
         $rendered=$Chaplin->renderFromFile($filename,$data);
         if($print){
-            print $rendered;
+            return print $rendered;
         }else{
             return $rendered;
+        }
+    }
+    function db($id=false){
+        if(!$id){
+            $id=@$_ENV['DB_ID'];
+        }
+        $prefix='DB'.$id;
+        $type=@$_ENV[$prefix.'_TYPE'];
+        if($type=='mysql'){
+            return new Medoo([
+                'type'=>'mysql',
+                'host'=>@$_ENV[$prefix.'_HOST'],
+                'database'=>@$_ENV[$prefix.'_DATABASE'],
+                'username'=>@$_ENV[$prefix.'_USERNAME'],
+                'password'=>@$_ENV[$prefix.'_PASSWORD'],
+                'charset'=>'utf8mb4',
+                'collation'=>'utf8mb4_unicode_ci',
+                'port'=>3306
+            ]);
+        }
+        if($type=='sqlite'){
+            $database=@$_ENV[$prefix.'_DATABASE'];
+            $database=ROOT.$database;
+            return new Medoo([
+                'type'=>'sqlite',
+                'database'=>$database
+            ]);
+        }
+        die('DB'.$id.' not found');
+    }
+    function dbMysqlExists($host,$user,$password,$dbname)
+    {
+        $conn = new \mysqli($host,$user,$password);
+        if (empty (mysqli_fetch_array(mysqli_query($conn, "SHOW DATABASES LIKE '$dbname'")))) {
+            return false;
+        } else {
+            return true;
         }
     }
     function dir($dir){
@@ -39,6 +76,15 @@ class Gaucho
             return $dirs;
         }
     }
+
+    function isCli(){
+        if(php_sapi_name()=="cli"){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
     function getNormalUri(){
         $scheme=$_SERVER['REQUEST_SCHEME'];
         $host=$_SERVER['HTTP_HOST'];
@@ -57,19 +103,15 @@ class Gaucho
             return $uri;
         }
     }
-    function isCli(){
-        if(php_sapi_name()=="cli"){
-            return true;
-        }else{
-            return false;
-        }
-    }
-    function run()
+
+    function run($routes=false)
     {
         new Env(ROOT.'/.env');
         ini_set("memory_limit", $_ENV['SITE_MEMORY']);
         $this->showErrors($_ENV['SITE_ERRORS']);
-        new Route(ROOT.'/routes.php');
+        if($routes){
+            new Route($routes);
+        }
     }
     function showErrors($bool){
         if($bool){
