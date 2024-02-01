@@ -22,7 +22,21 @@ class Gaucho
             return $rendered;
         }
     }
-
+    private function createMysqlDB(mixed $id)
+    {
+        $prefix='DB'.$id;
+        $host=$_ENV[$prefix.'_HOST'];
+        $user=$_ENV[$prefix.'_USERNAME'];
+        $password=$_ENV[$prefix.'_PASSWORD'];
+        $dbname=$_ENV[$prefix.'_DATABASE'];
+        if(!$this->dbMysqlExists($host,$user,$password,$dbname)){
+            $conn = new mysqli($host, $user, $password);
+            $sql='CREATE DATABASE '.$dbname.' CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;';
+            if(mysqli_query($conn,$sql)){
+                print 'db "'.$dbname.'" criado com sucesso'.PHP_EOL;
+            }
+        }
+    }
     function db($id = false)
     {
         if (!$id) {
@@ -59,7 +73,7 @@ class Gaucho
         if (empty (mysqli_fetch_array(mysqli_query($conn, "SHOW DATABASES LIKE '$dbname'")))) {
             return false;
         } else {
-            return true;
+            return $conn;
         }
     }
 
@@ -119,9 +133,13 @@ class Gaucho
 
     function mig($id=false)
     {
+        $prefix='DB'.$id;
+        $dbType=@$_ENV[$prefix.'_TYPE'];
+        if($dbType=='mysql'){
+            $this->createMysqlDB($id);
+        }
         $db=$this->db($id);
         $pdo=$db->pdo;
-        $dbType=$db->info()['driver'];
         $tableDirectory=glob(ROOT.'/table');
         $Mig=new Mig($pdo,$tableDirectory,$dbType);
         $Mig->mig();
