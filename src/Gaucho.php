@@ -1,9 +1,16 @@
 <?php
 
-namespace app;
+namespace Gaucho;
 
-class App
+use Gaucho\Env;
+
+class Gaucho
 {
+    function __construct()
+    {
+        $this->env();
+    }
+
     function chaplin($name,$data=[],$print=true){
         print $name;
     }
@@ -51,5 +58,21 @@ class App
     }
     function dirs(){
         return $this->dir();
+    }
+    private function env()
+    {
+        $filename=ROOT.'/.env';
+        new Env($filename);
+    }
+    function showErrors($bool){
+        if($bool){
+            ini_set('display_errors', 1);
+            ini_set('display_startup_errors', 1);
+            error_reporting(E_ALL);
+        }else{
+            ini_set('display_errors', 0);
+            ini_set('display_startup_errors', 0);
+            error_reporting(0);
+        }
     }
 }
