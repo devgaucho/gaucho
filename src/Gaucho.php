@@ -3,66 +3,49 @@
 namespace Gaucho;
 
 use Gaucho\Env;
+use Gaucho\Route;
 
 class Gaucho
 {
+    var $run;
     function __construct()
     {
-        $this->env();
+        if(!isset($this->run)){
+            $this->run=true;
+            new Env(ROOT.'/.env');
+            ini_set("memory_limit", $_ENV['SITE_MEMORY']);
+            $this->showErrors($_ENV['SITE_ERRORS']);
+            new Route(ROOT.'/routes.php');
+        }
     }
 
     function chaplin($name,$data=[],$print=true){
         print $name;
     }
-    function dir($segment=null){
-        // 1) pega os dados do header
-        $host=$_SERVER['HTTP_HOST'];
-        $uri=$_SERVER["REQUEST_URI"];
-        // 2) pega os diretórios
-        $uri=explode('?',$uri)[0];
-        // 3) transforma os diretórios em array
-        if($uri=='/'){
-            $arr[1]='/';
-        }else{
-            $arr=explode('/',$uri);
-            $arr=array_filter($arr);
-            $arr=array_values($arr);
-        }
-        // 4) remove o primeiro diretório no localhost
-        if($host=='localhost'){
-            unset($arr[0]);
-        }
-        // remove o public
-        if($host=='localhost' and @$arr[1]=='public'){
-            unset($arr[1]);
-        }
-        if(count($arr)=='0'){
-            $arr[]='/';
-        }
-        // 5) normaliza o array de saída
-        $i=1;
-        $out=null;
-        foreach ($arr as $key => $value) {
-            $out[$i]=$value;
-            $i++;
-        }
-        $arr=$out;
-        // 6) retorna o array ou o diretório específicado
-        if(is_null($segment)){
-            return $arr;
-        }elseif(isset($arr[$segment])){
-            return $arr[$segment];
+    function dir($dir){
+        $dirs=$this->dirs();
+        if(isset($dirs[$dir])){
+            return $dirs[$dir];
         }else{
             return false;
         }
     }
     function dirs(){
-        return $this->dir();
+        if($this->isCli()) {
+            return false;
+        }else{
+            $uri=$_SERVER["REQUEST_URI"];
+            $uri=explode('?',$uri)[0];
+            $dirs=explode('/',$uri);
+            return $dirs;
+        }
     }
-    private function env()
-    {
-        $filename=ROOT.'/.env';
-        new Env($filename);
+    function isCli(){
+        if(php_sapi_name()=="cli"){
+            return true;
+        }else{
+            return false;
+        }
     }
     function showErrors($bool){
         if($bool){

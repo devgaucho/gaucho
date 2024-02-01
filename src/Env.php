@@ -1,9 +1,9 @@
 <?php
 namespace Gaucho;
 class Env{
-    function __construct($env_filename_str=false){
-        if($env_filename_str){
-            return $this->load($env_filename_str);
+    function __construct($filename=false){
+        if($filename){
+            return $this->load($filename);
         }
     }
     function arr2env($contents_arr){
