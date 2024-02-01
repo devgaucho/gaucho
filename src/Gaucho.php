@@ -2,13 +2,21 @@
 
 namespace Gaucho;
 
+use Gaucho\Chaplin;
 use Gaucho\Env;
 use Gaucho\Route;
 
 class Gaucho
 {
     function chaplin($name,$data=[],$print=true){
-        print $name;
+        $Chaplin=new Chaplin();
+        $filename=ROOT.'/view/'.$name.'.html';
+        $rendered=$Chaplin->renderFromFile($filename,$data);
+        if($print){
+            print $rendered;
+        }else{
+            return $rendered;
+        }
     }
     function dir($dir){
         $dirs=$this->dirs();

@@ -6,6 +6,9 @@ use Gaucho\Gaucho;
 class Home extends Gaucho
 {
     function GET(){
-        print 'hello world';
+        $data=[
+          'name'=>'world'
+        ];
+        $this->chaplin('home',$data);
     }
 }
