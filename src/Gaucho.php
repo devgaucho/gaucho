@@ -22,21 +22,47 @@ class Gaucho
             return $rendered;
         }
     }
+
     private function createMysqlDB(mixed $id)
     {
-        $prefix='DB'.$id;
-        $host=$_ENV[$prefix.'_HOST'];
-        $user=$_ENV[$prefix.'_USERNAME'];
-        $password=$_ENV[$prefix.'_PASSWORD'];
-        $dbname=$_ENV[$prefix.'_DATABASE'];
-        if(!$this->dbMysqlExists($host,$user,$password,$dbname)){
+        $prefix = 'DB' . $id;
+        $host = $_ENV[$prefix . '_HOST'];
+        $user = $_ENV[$prefix . '_USERNAME'];
+        $password = $_ENV[$prefix . '_PASSWORD'];
+        $dbname = $_ENV[$prefix . '_DATABASE'];
+        if (!$this->dbMysqlExists($host, $user, $password, $dbname)) {
             $conn = new mysqli($host, $user, $password);
-            $sql='CREATE DATABASE '.$dbname.' CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;';
-            if(mysqli_query($conn,$sql)){
-                print 'db "'.$dbname.'" criado com sucesso'.PHP_EOL;
+            $sql = 'CREATE DATABASE ' . $dbname . ' CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;';
+            if (mysqli_query($conn, $sql)) {
+                print 'db "' . $dbname . '" criado com sucesso' . PHP_EOL;
             }
         }
     }
+
+    function createSQLiteDB($id)
+    {
+        $prefix = 'DB' . $id;
+        $filename = $_ENV[$prefix . '_DATABASE'];
+        if (!file_exists($filename)) {
+            $dir = ROOT . '/db';
+            if (!file_exists($dir)) {
+                if (mkdir($dir)) {
+                    print 'dir db criado com sucesso'.PHP_EOL;
+                } else {
+                    print 'erro ao criar o dir dr ';
+                    die(PHP_EOL);
+                }
+            }
+            system('touch '.$filename);
+            if (file_exists($filename)) {
+                print 'db "' . $filename . '" criado com sucesso' . PHP_EOL;
+            } else {
+                print 'erro ao criar o db ' . $filename;
+                die(PHP_EOL);
+            }
+        }
+    }
+
     function db($id = false)
     {
         if (!$id) {
@@ -58,7 +84,7 @@ class Gaucho
         }
         if ($type == 'sqlite') {
             $database = @$_ENV[$prefix . '_DATABASE'];
-            $database = ROOT . $database;
+            $database = ROOT .'/'. $database;
             return new Medoo([
                 'type' => 'sqlite',
                 'database' => $database
@@ -131,17 +157,20 @@ class Gaucho
         }
     }
 
-    function mig($id=false)
+    function mig($id = false)
     {
-        $prefix='DB'.$id;
-        $dbType=@$_ENV[$prefix.'_TYPE'];
-        if($dbType=='mysql'){
+        $prefix = 'DB' . $id;
+        $dbType = @$_ENV[$prefix . '_TYPE'];
+        if ($dbType == 'mysql') {
             $this->createMysqlDB($id);
         }
-        $db=$this->db($id);
-        $pdo=$db->pdo;
-        $tableDirectory=glob(ROOT.'/table');
-        $Mig=new Mig($pdo,$tableDirectory,$dbType);
+        if ($dbType == 'sqlite') {
+            $this->createSQLiteDB($id);
+        }
+        $db = $this->db($id);
+        $pdo = $db->pdo;
+        $tableDirectory = glob(ROOT . '/table');
+        $Mig = new Mig($pdo, $tableDirectory, $dbType);
         $Mig->mig();
     }
 
