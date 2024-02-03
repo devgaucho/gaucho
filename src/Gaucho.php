@@ -15,9 +15,15 @@ class Gaucho
     {
         $Chaplin = new Chaplin();
         $filename = ROOT . '/view/' . $name . '.html';
+        $data['SITE_URL']=$_ENV['SITE_URL'];
+        $data['SITE_VERSION']=$_ENV['SITE_VERSION'];
         $rendered = $Chaplin->renderFromFile($filename, $data);
         if ($print) {
-            return print $rendered;
+            if($this->isAjax()){
+                $this->json($data);
+            }else{
+                return print $rendered;
+            }
         } else {
             return $rendered;
         }
@@ -166,6 +172,15 @@ class Gaucho
         }
     }
 
+    function isAjax(){
+        if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) AND
+            strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
+            return true;
+        }else{
+            return false;
+        }
+    }
+
     function isCli()
     {
         if (php_sapi_name() == "cli") {
@@ -173,6 +188,11 @@ class Gaucho
         } else {
             return false;
         }
+    }
+
+    function json($mix){
+        header('Content-Type:application/json');
+        die(json_encode($mix,JSON_PRETTY_PRINT));
     }
 
     function mig($id = false)
