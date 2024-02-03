@@ -1,0 +1,79 @@
+/*desktop*/
+@media (min-width:@containerWidth){
+	.container{
+		margin:0 auto;
+		width:@containerWidth;
+	}
+	.row{
+		width:auto;
+	}
+	.row:before,
+	.row:after{
+		display:table;
+		line-height:0;
+		content:"";
+	}
+	.row:after{
+		clear:both;
+	}
+	.row>[class*="col"]{
+		display:block;
+		float:left;
+		width:100%;
+		min-height:30px;
+		margin-left:0%;
+	}
+	.row>[class*="col"]:first-child{
+		margin-left:0;
+	}
+	.row .col12{
+		width:100%;
+	}
+	.row .col11{
+		width:91.67%;
+	}
+	.row .col10{
+		width:83.33%;
+	}
+	.row .col9{
+		width:75%;
+	}
+	.row .col8{
+		width:66.67%;
+	}
+	.row .col7{
+		width:58.33%;
+	}
+	.row .col6{
+		width:50%;
+	}
+	.row .col5{
+		width:41.67%;
+	}
+	.row .col4{
+		width:33.33%;
+	}
+	.row .col3{
+		width:25%;
+	}
+	.row .col2{
+		width:16.67%;
+	}
+	.row .col1{
+		width:8.33%;
+	}
+}
+/*mobile*/
+@media (max-width:@containerWidth){
+	.container{
+		margin:0;
+		width:100%;
+	}
+	[class*="col"]{
+		display:block;
+		float:none;
+		padding:0 10px;
+		margin:0 auto;
+		width:auto;
+	}
+}

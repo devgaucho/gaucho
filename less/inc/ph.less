@@ -1,0 +1,43 @@
+.ph form,
+.ph h1,
+.ph h2,
+.ph h3,
+.ph p
+{
+	animation: loading 1s linear infinite alternate;
+	border:1px solid silver;
+	border-radius: 5px;
+	display: block;
+	color: transparent;
+	cursor: default;
+}
+.php form textarea{
+	border:none;
+}
+@keyframes loading{
+	0%{
+		opacity: 0.25;	
+		background-color: silver;
+	}
+	100% {
+		opacity: 1;
+		background-color: silver;
+	}
+}
+.ph form *{
+	background: transparent;
+	border:none;
+	color: transparent;
+	resize: none;	
+}		
+.ph h1,
+.ph h3,
+.ph h3{
+
+	height: 1em;
+	width:25%;
+}
+.ph p{
+	height: 5em;
+	width:100%;
+}
