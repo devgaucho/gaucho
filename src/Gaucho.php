@@ -32,7 +32,8 @@ class Gaucho
         $dbname = $_ENV[$prefix . '_DATABASE'];
         if (!$this->dbMysqlExists($host, $user, $password, $dbname)) {
             $conn = new mysqli($host, $user, $password);
-            $sql = 'CREATE DATABASE ' . $dbname . ' CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;';
+            $sql = 'CREATE DATABASE ' . $dbname;
+            $sql .= ' CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;';
             if (mysqli_query($conn, $sql)) {
                 print 'db "' . $dbname . '" criado com sucesso' . PHP_EOL;
             }
@@ -47,13 +48,13 @@ class Gaucho
             $dir = ROOT . '/db';
             if (!file_exists($dir)) {
                 if (mkdir($dir)) {
-                    print 'dir db criado com sucesso'.PHP_EOL;
+                    print 'dir db criado com sucesso' . PHP_EOL;
                 } else {
                     print 'erro ao criar o dir dr ';
                     die(PHP_EOL);
                 }
             }
-            system('touch '.$filename);
+            system('touch ' . $filename);
             if (file_exists($filename)) {
                 print 'db "' . $filename . '" criado com sucesso' . PHP_EOL;
             } else {
@@ -84,7 +85,7 @@ class Gaucho
         }
         if ($type == 'sqlite') {
             $database = @$_ENV[$prefix . '_DATABASE'];
-            $database = ROOT .'/'. $database;
+            $database = ROOT . '/' . $database;
             return new Medoo([
                 'type' => 'sqlite',
                 'database' => $database
@@ -128,15 +129,6 @@ class Gaucho
         }
     }
 
-    function isCli()
-    {
-        if (php_sapi_name() == "cli") {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
     function getNormalUri()
     {
         $scheme = $_SERVER['REQUEST_SCHEME'];
@@ -154,6 +146,32 @@ class Gaucho
             }
         } else {
             return $uri;
+        }
+    }
+
+    function getRotasEViews()
+    {
+        $viewsList = glob(ROOT . '/view/*.html');
+        if (count($viewsList) > 0) {
+            $rotas = [];
+            foreach ($viewsList as $view) {
+                $filename = $view;
+                $viewName = @explode('.', basename($view))[0];
+                $str = file_get_contents($filename);
+                $rotas[$viewName] = $str;
+            }
+            return $rotas;
+        } else {
+            die('views not found');
+        }
+    }
+
+    function isCli()
+    {
+        if (php_sapi_name() == "cli") {
+            return true;
+        } else {
+            return false;
         }
     }
 
@@ -181,6 +199,22 @@ class Gaucho
         $this->showErrors($_ENV['SITE_ERRORS']);
         if ($routes) {
             new Route($routes);
+        }
+    }
+
+    function salvarRotasEViews($filename, $rotasEViews)
+    {
+        $data = json_encode($rotasEViews, JSON_PRETTY_PRINT);
+        $data = 'var rotas=' . $data . ';' . PHP_EOL;
+        $data .= 'var SITE_DOMAIN="' . $_ENV['SITE_DOMAIN'] . '";' . PHP_EOL;
+        $data .= 'var SITE_NAME="' . $_ENV['SITE_NAME'] . '";' . PHP_EOL;
+        $data .= 'var SITE_URL="' . $_ENV['SITE_URL'] . '";' . PHP_EOL;
+        $data .= 'var SITE_VERSION="';
+        $data .= $_ENV['SITE_VERSION'] . '";' . PHP_EOL;
+        if (file_put_contents($filename, $data)) {
+            print $filename . ' criado com sucesso!' . PHP_EOL;
+        } else {
+            die("erro ao criar o " . $filename . PHP_EOL);
         }
     }
 
