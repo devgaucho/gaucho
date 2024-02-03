@@ -1,6 +1,7 @@
 /.env
 /.idea
 /db/
+/off
 /test*.php
 /todo.txt
 /vendor/
