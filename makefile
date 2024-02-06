@@ -22,13 +22,12 @@ on:
 	rm -f off
 public/css/style.css: less/style.less
 	$(LESS) $< $@ --clean-css
-	$(LESS) $< $@ --clean-css
 public/js/script.js: $(JS_SOURCES)
 	$(UGLIFY) $^ --output $@ --compress
 pull:
 	git pull origin main
-static: clean public/css/style.css public/js/script.js
+spa:
+	$(PHP) bin/spa.php	
+static: clean spa public/css/style.css public/js/script.js
 vendor: composer.json composer.lock
 	$(COMPOSER) install
-spa:
-	$(PHP) bin/spa.php

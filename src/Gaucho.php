@@ -15,6 +15,7 @@ class Gaucho
     {
         $Chaplin = new Chaplin();
         $filename = ROOT . '/view/' . $name . '.html';
+        $data['SITE_DOMAIN'] = $_ENV['SITE_DOMAIN'];
         $data['SITE_URL'] = $_ENV['SITE_URL'];
         $data['SITE_VERSION'] = $_ENV['SITE_VERSION'];
         $rendered = $Chaplin->renderFromFile($filename, $data);

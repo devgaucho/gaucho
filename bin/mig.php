@@ -1,5 +1,4 @@
 <?php
-namespace bin;
 global $Gaucho;
 require __DIR__.'/../cfg.php';
 $Gaucho->run();
