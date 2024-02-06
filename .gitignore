@@ -4,7 +4,7 @@
 /.idea
 /off
 /.project
-/.settings
+/.settings/
 /test*.php
 /todo.txt
 /vendor/
