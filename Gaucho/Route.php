@@ -1,11 +1,9 @@
 <?php
-
 namespace Gaucho;
-
-use Gaucho\Gaucho;
 
 class Route extends Gaucho
 {
+
     var $routes;
 
     function __construct($filename)
@@ -29,7 +27,7 @@ class Route extends Gaucho
         $rota = $this->dir(1);
         // procurar no rotas.php
         $rotaAtual = @$this->routes[$rota];
-        if (!$rotaAtual) {
+        if (! $rotaAtual) {
             // caso a rota não exista procurar dinamicas
             if (isset($this->routes['*'])) {
                 $rotaAtual = $this->routes['*'];
@@ -50,16 +48,16 @@ class Route extends Gaucho
             die("controller " . $filename . ' notFound');
         }
         $nameWithNamespace = '\App\Controller\\' . $name;
-        if (!class_exists($nameWithNamespace)) {
+        if (! class_exists($nameWithNamespace)) {
             die("class " . $nameWithNamespace . ' not found');
         }
         $obj = new $nameWithNamespace();
         $method = $this->getMethod();
         if (method_exists($obj, $method)) {
-            return call_user_func_array(
-                [$obj, $method],
-                []
-            );
+            return call_user_func_array([
+                $obj,
+                $method
+            ], []);
         } else {
             die($name . '->' . $method . ' not found');
         }
@@ -76,7 +74,8 @@ class Route extends Gaucho
         return $method;
     }
 
-    function notFound() {
+    function notFound()
+    {
         http_response_code(404);
         if (isset($this->routes['404'])) {
             $rotaAtual = $this->routes['404'];

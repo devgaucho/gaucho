@@ -1,9 +1,9 @@
 <?php
-
 namespace Gaucho;
 
 class Chaplin
 {
+
     function render($str, $data)
     {
         return $this->renderFromString($str, $data);
@@ -19,26 +19,19 @@ class Chaplin
         $fnLoop = function ($matches) use ($data) {
             $blockName = $matches[1];
             $blockContent = $matches[2];
-            if (
-                isset($data[$blockName]) and
-                is_array($data[$blockName])
-            ) {
+            if (isset($data[$blockName]) and is_array($data[$blockName])) {
                 // processa para cada variável
                 $blockResult = '';
                 foreach ($data[$blockName] as $item) {
-                    $blockResult .= $this->render(
-                        $blockContent, $item
-                    );
+                    $blockResult .= $this->render($blockContent, $item);
                 }
                 return $blockResult;
             } else {
-                /// remove o bloco se ele não existe
+                // / remove o bloco se ele não existe
                 return '';
             }
         };
-        $str = preg_replace_callback(
-            $blockPattern, $fnLoop, $str
-        );
+        $str = preg_replace_callback($blockPattern, $fnLoop, $str);
         // renderiza as variáveis simples
         $fnVar = function ($matches) use ($data) {
             $variableName = $matches[1];
@@ -53,9 +46,7 @@ class Chaplin
                 return htmlspecialchars($value);
             }
         };
-        $str = preg_replace_callback(
-            $variablePattern, $fnVar, $str
-        );
+        $str = preg_replace_callback($variablePattern, $fnVar, $str);
         return $str;
     }
 
@@ -63,9 +54,7 @@ class Chaplin
     {
         if (file_exists($filename)) {
             $template = file_get_contents($filename);
-            return $this->renderFromString(
-                $template, $data
-            );
+            return $this->renderFromString($template, $data);
         } else {
             die(htmlentities($filename) . ' not found');
         }

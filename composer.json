@@ -1,14 +1,14 @@
 {
-    "require": {
-        "catfan/medoo": "^2.1",
-        "php": "^8.1",
-        "ext-mysqli": "*",
-        "ext-pdo": "*"
-    },
-    "autoload":{
-        "psr-4":{
-            "App\\":"app/",
-            "Gaucho\\":"src/"
-        }
-    }
+	"require" : {
+		"catfan/medoo" : "^2.1",
+		"php" : "^8.1",
+		"ext-mysqli" : "*",
+		"ext-pdo" : "*"
+	},
+	"autoload" : {
+		"psr-4" : {
+			"App\\" : "app/",
+			"Gaucho\\" : "src/"
+		}
+	}
 }
