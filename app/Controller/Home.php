@@ -10,7 +10,7 @@ class Home extends Gaucho
     {
         $data = [
             'name' => 'world',
-            'title' => 'Início'
+            'title' => $_ENV['SITE_NAME']
         ];
         $this->chaplin('inc/header',$data);
         $this->chaplin('home',$data);
