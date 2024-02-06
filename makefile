@@ -18,8 +18,10 @@ mig:
 off:
 	touch off
 on:
+	$(LESS) $< $@ --clean-css
 	rm -f off
 public/css/style.css: less/style.less
+	$(LESS) $< $@ --clean-css
 	$(LESS) $< $@ --clean-css
 public/js/script.js: $(JS_SOURCES)
 	$(UGLIFY) $^ --output $@ --compress

@@ -9,7 +9,7 @@ class Mig
 {
     var $conn;
     var $tableDirectory;
-    var $dbType;
+    var $dbType;        var_dump($this->routes);
     var $tamanhos;
 
     function __construct($conn, $tableDirectory, $dbType)

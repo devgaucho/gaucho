@@ -1,6 +1,7 @@
 <?php
 
 namespace Gaucho;
+
 class Chaplin
 {
     function render($str, $data)

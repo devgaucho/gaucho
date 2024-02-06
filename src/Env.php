@@ -1,6 +1,7 @@
 <?php
 
 namespace Gaucho;
+
 class Env
 {
     function __construct($filename = false)
@@ -18,7 +19,7 @@ class Env
             $first_char = substr($value_str, 0, 1);
             if (
                 !empty($value_str) and
-                $first_char <> '#'
+                $first_char != '#'
             ) {
                 $value_arr = explode('=', $value_str);
             }

@@ -6,9 +6,9 @@ use Gaucho\Gaucho;
 
 class Route extends Gaucho
 {
-    var $routes;
+    public $routes;
 
-    function __construct($filename)
+    public function __construct($filename)
     {
         if (file_exists($filename)) {
             $mix = require $filename;
@@ -41,7 +41,7 @@ class Route extends Gaucho
         $this->controller($rotaAtual);
     }
 
-    function controller($name)
+    public function controller($name)
     {
         $filename = ROOT . '/app/Controller/' . $name . '.php';
         if (file_exists($filename)) {
@@ -65,18 +65,18 @@ class Route extends Gaucho
         }
     }
 
-    function getMethod($raw = false)
+    public function getMethod($raw = false)
     {
         $method = @$_SERVER['REQUEST_METHOD'];
         if ($raw) {
             return $method;
-        } elseif ($method <> 'POST') {
+        } elseif ($method != 'POST') {
             $method = 'GET';
         }
         return $method;
     }
 
-    function notFound()
+    public function notFound()
     {
         http_response_code(404);
         if (isset($this->routes['404'])) {

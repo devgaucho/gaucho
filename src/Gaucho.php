@@ -15,13 +15,13 @@ class Gaucho
     {
         $Chaplin = new Chaplin();
         $filename = ROOT . '/view/' . $name . '.html';
-        $data['SITE_URL']=$_ENV['SITE_URL'];
-        $data['SITE_VERSION']=$_ENV['SITE_VERSION'];
+        $data['SITE_URL'] = $_ENV['SITE_URL'];
+        $data['SITE_VERSION'] = $_ENV['SITE_VERSION'];
         $rendered = $Chaplin->renderFromFile($filename, $data);
         if ($print) {
-            if($this->isAjax()){
+            if ($this->isAjax()) {
                 $this->json($data);
-            }else{
+            } else {
                 return print $rendered;
             }
         } else {
@@ -86,7 +86,7 @@ class Gaucho
                 'password' => @$_ENV[$prefix . '_PASSWORD'],
                 'charset' => 'utf8mb4',
                 'collation' => 'utf8mb4_unicode_ci',
-                'port' => 3306
+                'port' => 3306,
             ]);
         }
         if ($type == 'sqlite') {
@@ -94,7 +94,7 @@ class Gaucho
             $database = ROOT . '/' . $database;
             return new Medoo([
                 'type' => 'sqlite',
-                'database' => $database
+                'database' => $database,
             ]);
         }
         die('DB' . $id . ' not found');
@@ -103,7 +103,7 @@ class Gaucho
     function dbMysqlExists($host, $user, $password, $dbname)
     {
         $conn = new mysqli($host, $user, $password);
-        if (empty (mysqli_fetch_array(mysqli_query($conn, "SHOW DATABASES LIKE '$dbname'")))) {
+        if (empty(mysqli_fetch_array(mysqli_query($conn, "SHOW DATABASES LIKE '$dbname'")))) {
             return false;
         } else {
             return $conn;
@@ -172,11 +172,12 @@ class Gaucho
         }
     }
 
-    function isAjax(){
-        if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) AND
+    function isAjax()
+    {
+        if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) and
             strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
             return true;
-        }else{
+        } else {
             return false;
         }
     }
@@ -190,9 +191,10 @@ class Gaucho
         }
     }
 
-    function json($mix){
+    function json($mix)
+    {
         header('Content-Type:application/json');
-        die(json_encode($mix,JSON_PRETTY_PRINT));
+        die(json_encode($mix, JSON_PRETTY_PRINT));
     }
 
     function mig($id = false)
