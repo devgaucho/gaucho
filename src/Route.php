@@ -1,6 +1,8 @@
 <?php
 namespace Gaucho;
 
+use Gaucho\Gaucho;
+
 class Route extends Gaucho
 {
 

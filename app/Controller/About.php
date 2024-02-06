@@ -8,8 +8,8 @@ class About extends Gaucho{
 		$data=[
 			'title'=>'Sobre'
 		];
-// 		TODO adicionar header
+        $this->chaplin('inc/header',$data);
 		$this->chaplin('about',$data);
-// 		TODO adicionar footer
+		$this->chaplin('inc/footer',$data);
 	}
 }

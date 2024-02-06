@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d92e8dddd9bb15eeabddf0335c66a39d",
+    "content-hash": "65b765f35b8a2151204a3c18f6285a39",
     "packages": [
         {
             "name": "catfan/medoo",
-            "version": "v2.1.11",
+            "version": "v2.1.12",
             "source": {
                 "type": "git",
                 "url": "https://github.com/catfan/Medoo.git",
-                "reference": "55f2e2368e069f5dbba07670e142cd1febfcd382"
+                "reference": "d1ff4e0e873a3e032e3d8804031dd6be4e013b22"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/catfan/Medoo/zipball/55f2e2368e069f5dbba07670e142cd1febfcd382",
-                "reference": "55f2e2368e069f5dbba07670e142cd1febfcd382",
+                "url": "https://api.github.com/repos/catfan/Medoo/zipball/d1ff4e0e873a3e032e3d8804031dd6be4e013b22",
+                "reference": "d1ff4e0e873a3e032e3d8804031dd6be4e013b22",
                 "shasum": ""
             },
             "require": {
@@ -80,7 +80,7 @@
                     "type": "open_collective"
                 }
             ],
-            "time": "2024-01-29T06:47:27+00:00"
+            "time": "2024-02-03T11:28:59+00:00"
         }
     ],
     "packages-dev": [],
@@ -89,7 +89,11 @@
     "stability-flags": [],
     "prefer-stable": false,
     "prefer-lowest": false,
-    "platform": [],
+    "platform": {
+        "php": "^8.1",
+        "ext-mysqli": "*",
+        "ext-pdo": "*"
+    },
     "platform-dev": [],
     "plugin-api-version": "2.6.0"
 }

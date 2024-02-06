@@ -1,6 +1,10 @@
 <?php
 namespace Gaucho;
 
+use Gaucho\Chaplin;
+use Gaucho\Env;
+use Gaucho\Mig;
+use Gaucho\Route;
 use Medoo\Medoo;
 use mysqli;
 
@@ -25,7 +29,7 @@ class Gaucho
         }
     }
 
-    private function createMysqlDB(mixed $id)
+    function createMysqlDB(mixed $id)
     {
         $prefix = 'DB' . $id;
         $host = $_ENV[$prefix . '_HOST'];

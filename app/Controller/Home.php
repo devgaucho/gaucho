@@ -12,8 +12,8 @@ class Home extends Gaucho
             'name' => 'world',
             'title' => 'Início'
         ];
-//         TODO adicionar header
-        $this->chaplin('home', $data);
-        // TODO adicionar footer
+        $this->chaplin('inc/header',$data);
+        $this->chaplin('home',$data);
+        $this->chaplin('inc/footer',$data);
     }
 }
