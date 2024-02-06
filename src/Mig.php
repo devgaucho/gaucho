@@ -7,10 +7,10 @@ use \PDOException;
 
 class Mig
 {
-    var $conn;
-    var $tableDirectory;
-    var $dbType;
-    var $tamanhos;
+    public $conn;
+    public $tableDirectory;
+    public $dbType;
+    public $tamanhos;
 
     function __construct($conn, $tableDirectory, $dbType)
     {
@@ -34,7 +34,7 @@ class Mig
                     } else {
                         $tamanho = @$this
                             ->tamanhos[$tableName]
-                        [$columnName];
+                            [$columnName];
                         if ($tamanho) {
                             $sufix = 'VARCHAR(';
                             $sufix .= $tamanho . ')';
@@ -56,7 +56,7 @@ class Mig
                     } else {
                         $tamanho = @$this
                             ->tamanhos[$tableName]
-                        [$columnName];
+                            [$columnName];
                         if ($tamanho) {
                             $sufix = 'VARCHAR(';
                             $sufix .= $tamanho . ')';
@@ -345,7 +345,7 @@ class Mig
                 ) {
                     $tamanho = $this
                         ->tamanhos[$tableName]
-                    [$columnName];
+                        [$columnName];
                     $this->mudarOTamanho(
                         $tableName,
                         $columnName,
