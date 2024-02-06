@@ -1,7 +1,11 @@
+/.buildpath
+/db/
 /.env
 /.idea
-/db/
 /off
+/.project
+/.settings
 /test*.php
 /todo.txt
 /vendor/
+
