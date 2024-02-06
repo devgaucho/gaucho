@@ -1,8 +1,19 @@
 {
 	"name" : "gaucho/gaucho",
-	"description" : "Meu framework PHP de single-page-application (SPA)",
+	"description" : "Framework PHP para single-page-application (SPA)",
 	"type" : "project",
 	"license" : "MIT",
+	"keywords" : [
+		"framework",
+		"single-page-application",
+		"spa",
+		"gaucho"
+	],
+	"authors" : [{
+			"name" : "gaucho.dev",
+			"email" : "119246170+devgaucho@users.noreply.github.com"
+		}
+	],
 	"require" : {
 		"catfan/medoo" : "^2.1",
 		"php" : "^8.1",
@@ -13,5 +24,6 @@
 		"psr-4" : {
 			"Gaucho\\" : "src/"
 		}
-	}
+	},
+	"minimum-stability" : "dev"
 }
