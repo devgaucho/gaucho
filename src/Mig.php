@@ -7,10 +7,10 @@ use \PDOException;
 
 class Mig
 {
-    public $conn;
-    public $tableDirectory;
-    public $dbType;
-    public $tamanhos;
+    var $conn;
+    var $tableDirectory;
+    var $dbType;
+    var $tamanhos;
 
     function __construct($conn, $tableDirectory, $dbType)
     {
@@ -27,47 +27,47 @@ class Mig
         } else {
             switch ($this->dbType) {
                 case 'mysql':
-                    if ($columnName == 'id') {
-                        $sufix = 'bigint(20) ';
-                        $sufix .= 'UNSIGNED NOT NULL ';
-                        $sufix .= 'AUTO_INCREMENT';
+                if ($columnName == 'id') {
+                    $sufix = 'bigint(20) ';
+                    $sufix .= 'UNSIGNED NOT NULL ';
+                    $sufix .= 'AUTO_INCREMENT';
+                } else {
+                    $tamanho = @$this
+                    ->tamanhos[$tableName]
+                    [$columnName];
+                    if ($tamanho) {
+                        $sufix = 'VARCHAR(';
+                        $sufix .= $tamanho . ')';
                     } else {
-                        $tamanho = @$this
-                            ->tamanhos[$tableName]
-                            [$columnName];
-                        if ($tamanho) {
-                            $sufix = 'VARCHAR(';
-                            $sufix .= $tamanho . ')';
-                        } else {
-                            $sufix = 'LONGTEXT ';
-                            $sufix .= 'NULL';
-                        }
+                        $sufix = 'LONGTEXT ';
+                        $sufix .= 'NULL';
                     }
-                    $sql = 'ALTER TABLE `';
-                    $sql .= $tableName . '` ADD `';
-                    $sql .= $columnName . '` ' . $sufix . '; ';
-                    break;
+                }
+                $sql = 'ALTER TABLE `';
+                $sql .= $tableName . '` ADD `';
+                $sql .= $columnName . '` ' . $sufix . '; ';
+                break;
 
                 case 'sqlite':
-                    if ($columnName == 'id') {
-                        $sufix = 'INTEGER PRIMARY ';
-                        $sufix .= 'KEY ';
-                        $sufix .= 'AUTOINCREMENT';
+                if ($columnName == 'id') {
+                    $sufix = 'INTEGER PRIMARY ';
+                    $sufix .= 'KEY ';
+                    $sufix .= 'AUTOINCREMENT';
+                } else {
+                    $tamanho = @$this
+                    ->tamanhos[$tableName]
+                    [$columnName];
+                    if ($tamanho) {
+                        $sufix = 'VARCHAR(';
+                        $sufix .= $tamanho . ')';
                     } else {
-                        $tamanho = @$this
-                            ->tamanhos[$tableName]
-                            [$columnName];
-                        if ($tamanho) {
-                            $sufix = 'VARCHAR(';
-                            $sufix .= $tamanho . ')';
-                        } else {
-                            $sufix = 'TEXT';
-                        }
+                        $sufix = 'TEXT';
                     }
-                    $sql = 'ALTER TABLE `' . $tableName;
-                    $sql .= '` ADD COLUMN `';
-                    $sql .= $columnName . '` ' . $sufix . ';';
-                    break;
+                }
+                $sql = 'ALTER TABLE `' . $tableName;
+                $sql .= '` ADD COLUMN `';
+                $sql .= $columnName . '` ' . $sufix . ';';
+                break;
             }
             return $this->query($sql);
         }
@@ -82,19 +82,19 @@ class Mig
         $sql .= $tableName . '` (' . PHP_EOL;
         switch ($this->dbType) {
             case 'mysql':
-                $sql = $sql;
-                $id = 'bigint(20) UNSIGNED NOT NULL ';
-                $id .= 'AUTO_INCREMENT,' . PHP_EOL;
-                $id .= chr(9) . 'PRIMARY KEY (id)';
-                $text = 'LONGTEXT NULL';
-                $sufix = ' ENGINE=InnoDB;';
-                break;
+            $sql = $sql;
+            $id = 'bigint(20) UNSIGNED NOT NULL ';
+            $id .= 'AUTO_INCREMENT,' . PHP_EOL;
+            $id .= chr(9) . 'PRIMARY KEY (id)';
+            $text = 'LONGTEXT NULL';
+            $sufix = ' ENGINE=InnoDB;';
+            break;
 
             case 'sqlite':
-                $id = 'INTEGER PRIMARY KEY AUTOINCREMENT';
-                $text = 'TEXT';
-                $sufix = ';';
-                break;
+            $id = 'INTEGER PRIMARY KEY AUTOINCREMENT';
+            $text = 'TEXT';
+            $sufix = ';';
+            break;
         }
         $end = end($columnNames);
         foreach ($columnNames as $columnName) {
@@ -102,7 +102,7 @@ class Mig
                 $type = $id;
             } else {
                 $tamanho = @$this
-                    ->tamanhos[$tableName][$columnName];
+                ->tamanhos[$tableName][$columnName];
                 if ($tamanho) {
                     $type = 'VARCHAR(';
                     $type .= $tamanho . ')';
@@ -125,39 +125,39 @@ class Mig
     {
         switch ($this->dbType) {
             case 'mysql':
-                $sql = 'ALTER TABLE `' . $tableName;
-                $sql .= '` DROP `' . $columnName . '`;';
-                return $this->query($sql);
-                break;
+            $sql = 'ALTER TABLE `' . $tableName;
+            $sql .= '` DROP `' . $columnName . '`;';
+            return $this->query($sql);
+            break;
 
             case 'sqlite':
                 // pega as colunas da tabela antiga
-                $columnNames = $this
-                    ->getTableColumns($tableName);
-                $columnNames = array_flip($columnNames);
+            $columnNames = $this
+            ->getTableColumns($tableName);
+            $columnNames = array_flip($columnNames);
                 // remove a coluna a ser deletada
-                unset($columnNames[$columnName]);
-                $columnNames = array_flip($columnNames);
+            unset($columnNames[$columnName]);
+            $columnNames = array_flip($columnNames);
                 // cria a tabela temporária
-                $tmpTableName = 'mig_tmp_table';
-                $this->dropTable($tmpTableName);
-                $this->createTable(
-                    $tmpTableName, $columnNames
-                );
-                $columnNamesInline = '`';
-                $columnNamesInline .= implode(
-                    '`,`', $columnNames
-                );
-                $columnNamesInline .= '`';
-                $sql = 'INSERT INTO ' . $tmpTableName;
-                $sql .= ' SELECT ';
-                $sql .= $columnNamesInline . ' FROM `';
-                $sql .= $tableName . '`;';
-                $this->query($sql);
-                $this->dropTable($tableName);
-                $this->renameTable($tmpTableName, $tableName);
-                return true;
-                break;
+            $tmpTableName = 'mig_tmp_table';
+            $this->dropTable($tmpTableName);
+            $this->createTable(
+                $tmpTableName, $columnNames
+            );
+            $columnNamesInline = '`';
+            $columnNamesInline .= implode(
+                '`,`', $columnNames
+            );
+            $columnNamesInline .= '`';
+            $sql = 'INSERT INTO ' . $tmpTableName;
+            $sql .= ' SELECT ';
+            $sql .= $columnNamesInline . ' FROM `';
+            $sql .= $tableName . '`;';
+            $this->query($sql);
+            $this->dropTable($tableName);
+            $this->renameTable($tmpTableName, $tableName);
+            return true;
+            break;
         }
     }
 
@@ -225,18 +225,18 @@ class Mig
     {
         switch ($this->dbType) {
             case 'mysql':
-                $sql = 'SHOW COLUMNS FROM `' . $tableName . '`;';
-                $column = 0;
-                break;
+            $sql = 'SHOW COLUMNS FROM `' . $tableName . '`;';
+            $column = 0;
+            break;
 
             case 'sqlite':
-                $sql = 'PRAGMA table_info(' . $tableName . ');';
-                $column = 1;
-                break;
+            $sql = 'PRAGMA table_info(' . $tableName . ');';
+            $column = 1;
+            break;
         }
         $arr = $this
-            ->query($sql)
-            ->fetchAll(PDO::FETCH_COLUMN, $column);
+        ->query($sql)
+        ->fetchAll(PDO::FETCH_COLUMN, $column);
         sort($arr);
         return $arr;
     }
@@ -245,17 +245,17 @@ class Mig
     {
         switch ($this->dbType) {
             case 'mysql':
-                $sql = 'SHOW TABLES;';
-                break;
+            $sql = 'SHOW TABLES;';
+            break;
 
             case 'sqlite':
-                $sql = 'SELECT name FROM sqlite_master ';
-                $sql .= 'WHERE type="table" AND name NOT ';
-                $sql .= 'LIKE "sqlite_%";';
-                break;
+            $sql = 'SELECT name FROM sqlite_master ';
+            $sql .= 'WHERE type="table" AND name NOT ';
+            $sql .= 'LIKE "sqlite_%";';
+            break;
         }
         $arr = $this
-            ->query($sql)->fetchAll(PDO::FETCH_COLUMN, 0);
+        ->query($sql)->fetchAll(PDO::FETCH_COLUMN, 0);
         sort($arr);
         return $arr;
     }
@@ -266,7 +266,7 @@ class Mig
         $tables = [];
         foreach ($tableList as $tableName) {
             $tables[$tableName] = $this
-                ->getTableColumns($tableName);
+            ->getTableColumns($tableName);
         }
         return $tables;
     }
@@ -314,7 +314,7 @@ class Mig
             // não existem nas migrations
             foreach ($columnsToDelete as $columnName) {
                 $this
-                    ->dropColumn($columnName, $tableName);
+                ->dropColumn($columnName, $tableName);
                 print 'coluna "' . $columnName;
                 print '" da tabela "' . $tableName;
                 print '" apagada com sucesso';
@@ -326,9 +326,9 @@ class Mig
             // cria as colunas que não existem no banco
             foreach ($columnsToCreate as $columnName) {
                 $this
-                    ->createColumn(
-                        $columnName, $tableName
-                    );
+                ->createColumn(
+                    $columnName, $tableName
+                );
                 print 'coluna "' . $columnName;
                 print '" da tabela "' . $tableName;
                 print '" criada com sucesso' . PHP_EOL;
@@ -344,8 +344,8 @@ class Mig
                     )
                 ) {
                     $tamanho = $this
-                        ->tamanhos[$tableName]
-                        [$columnName];
+                    ->tamanhos[$tableName]
+                    [$columnName];
                     $this->mudarOTamanho(
                         $tableName,
                         $columnName,
@@ -383,14 +383,14 @@ class Mig
     {
         switch ($this->dbType) {
             case 'mysql':
-                $sql = 'ALTER TABLE `' . $oldTableName;
-                $sql .= '` RENAME `' . $newTableName . '`';
-                break;
+            $sql = 'ALTER TABLE `' . $oldTableName;
+            $sql .= '` RENAME `' . $newTableName . '`';
+            break;
 
             case 'sqlite':
-                $sql = 'ALTER TABLE `' . $oldTableName;
-                $sql .= '` RENAME TO `' . $newTableName . '`';
-                break;
+            $sql = 'ALTER TABLE `' . $oldTableName;
+            $sql .= '` RENAME TO `' . $newTableName . '`';
+            break;
         }
         return $this->query($sql);
     }

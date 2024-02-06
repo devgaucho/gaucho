@@ -1,15 +1,13 @@
-<?php
+<?php 
 namespace App\Controller;
 
 use Gaucho\Gaucho;
 
-class About extends Gaucho
-{
-	public function GET()
-	{
-		$data = [
-			'title' => 'Sobre',
+class About extends Gaucho{
+	function GET(){
+		$data=[
+			'title'=>'Sobre'
 		];
-		$this->chaplin('about', $data);
+		$this->chaplin('about',$data);
 	}
 }
