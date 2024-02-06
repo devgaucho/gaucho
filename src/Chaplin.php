@@ -32,7 +32,7 @@ class Chaplin
                 }
                 return $blockResult;
             } else {
-                // remove o bloco se ele não existe
+                /// remove o bloco se ele não existe
                 return '';
             }
         };

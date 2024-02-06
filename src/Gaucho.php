@@ -144,7 +144,7 @@ class Gaucho
         $full = $scheme . '://' . $host . $uri;
         $env = @$_ENV['SITE_URL'];
         if ($env) {
-            $uri = explode($env, $full)[1];
+            $uri = @explode($env, $full)[1];
             if (empty($uri)) {
                 return '/';
             } else {
