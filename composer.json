@@ -10,10 +10,10 @@
 		"gaucho"
 	],
 	"authors" : [{
-			"name" : "gaucho.dev",
-			"email" : "119246170+devgaucho@users.noreply.github.com"
-		}
-	],
+		"name" : "gaucho.dev",
+		"email" : "119246170+devgaucho@users.noreply.github.com"
+	}
+],
 	"require" : {
 		"catfan/medoo" : "^2.1",
 		"php" : "^8.1",
@@ -22,8 +22,9 @@
 	},
 	"autoload" : {
 		"psr-4" : {
-			"Gaucho\\" : "src/"
+			"App\\": "app/",
+			"Gaucho\\": "src/"
 		}
 	},
-	"minimum-stability" : "dev"
+	"minimum-stability" : "stable"
 }
