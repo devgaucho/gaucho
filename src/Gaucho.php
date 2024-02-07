@@ -217,6 +217,11 @@ class Gaucho
         $Mig->mig();
     }
 
+    function redirect($url){
+        header('Location: '.$url);
+        die();
+    }
+
     function run($routes = false)
     {
         new Env(ROOT . '/.env');
@@ -256,3 +261,4 @@ class Gaucho
         }
     }
 }
+
