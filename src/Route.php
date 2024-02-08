@@ -39,8 +39,8 @@ class Route extends Gaucho{
     }
 
     function controller($name){
-        $filename=ROOT.'/app/Controller/'.$name;
-        $filename.='Controller.php';
+        $name=$name.'Controller';
+        $filename=ROOT.'/app/Controller/'.$name.'.php';
         if(file_exists($filename)){
             require_once $filename;
         }else{

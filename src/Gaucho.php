@@ -1,5 +1,5 @@
 <?php
-namespace Gaucho
+namespace Gaucho;
 use Gaucho\Chaplin;
 use Gaucho\Env;
 use Gaucho\Mig;

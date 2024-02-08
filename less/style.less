@@ -10,6 +10,10 @@ a:hover{
 	color:blue;
 }
 
+body{
+	font-family: @fontFamily;
+}
+
 button,label{
 	cursor: pointer;
 }
@@ -28,12 +32,13 @@ form.vertical{
 }
 
 form.vertical input,
-form.vertical label{
+form.vertical label,
+form.vertical textarea{
 	display:block;
-	margin:0 auto;
+	margin:0 auto 0.5em auto;
 	width: calc(100% - 10px);
 }
 
-form.vertical input{
-	margin-bottom: 1em;
+label{
+	font-weight:bold;
 }
