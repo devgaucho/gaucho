@@ -1,9 +1,11 @@
 <?php
-const ROOT=__DIR__;
-require ROOT.'/vendor/autoload.php';
+const ROOT = __DIR__;
+require ROOT . '/vendor/autoload.php';
+use Gaucho\Controller;
 use Gaucho\Gaucho;
-$Gaucho=new Gaucho();
-if(!$Gaucho->isCli() and file_exists(ROOT.'/off')){
+$Controller=new Controller();
+$Gaucho = new Gaucho();
+if (!$Controller->isCli() and file_exists(ROOT . '/off')){
     http_response_code(503);
     die("maintenance mode");
 }

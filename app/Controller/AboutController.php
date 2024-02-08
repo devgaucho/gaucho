@@ -1,7 +1,7 @@
 <?php
 namespace App\Controller;
-use Gaucho\Gaucho;
-class AboutController extends Gaucho{
+use Gaucho\Controller;
+class AboutController extends Controller{
     function GET(){
         $data=[
             'title'=>'Sobre'

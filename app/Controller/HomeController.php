@@ -1,7 +1,7 @@
 <?php
 namespace App\Controller;
-use Gaucho\Gaucho;
-class HomeController extends Gaucho{
+use Gaucho\Controller;
+class HomeController extends Controller{
     function GET(){
         $data=[
             'name'=>'world',
