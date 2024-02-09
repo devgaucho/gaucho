@@ -6,10 +6,10 @@ class Model extends DB{
 	function create($data){
 		$data['created_at']=time();
 		$this->db()->insert($this->table,$data);
-		return $this->db->id();
+		return $this->db()->id();
 	}
 	function readAll(){
-		$cols='*';
+		$cols=['*'];
 		return $this->db()->select($this->table,$cols);
 	}
 	function readById($id){
