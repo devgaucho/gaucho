@@ -44,7 +44,11 @@ class Controller{
 		}
 	}
 	function getNormalUri(){
-		$scheme=$_SERVER['REQUEST_SCHEME'];
+		if($_SERVER["SERVER_PORT"]=='443'){
+			$scheme='https';
+		}else{
+			$scheme='http';
+		}
 		$host=$_SERVER['HTTP_HOST'];
 		$uri=$_SERVER["REQUEST_URI"];
 		$uri=explode('?',$uri)[0];
@@ -83,7 +87,7 @@ class Controller{
 		}else{
 			return false;
 		}
-	}
+	}	
 	function json($mix){
 		header('Content-Type:application/json');
 		die(json_encode($mix,JSON_PRETTY_PRINT));

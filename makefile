@@ -26,6 +26,8 @@ public/js/script.js: $(JS_SOURCES)
 	$(UGLIFY) $^ --output $@ --compress
 pull:
 	git pull origin main
+run:
+	cd public && php -S localhost:8080
 spa:
 	$(PHP) bin/spa.php	
 static: clean spa public/css/style.css public/js/script.js

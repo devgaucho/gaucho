@@ -3,7 +3,7 @@ namespace Gaucho;
 use Gaucho\Controller;
 class Route extends Controller{
 	var $routes;
-	function __construct($filename){
+	function __construct($filename=''){
 		if(file_exists($filename)){
 			$mix=require $filename;
 			if(is_array($mix)){
@@ -12,7 +12,7 @@ class Route extends Controller{
 			}else{
 				die('invalid '.$filename);
 			}
-		}else{
+		}elseif(!$this->isCli()){
 			die($filename.' not found');
 		}
 	}
@@ -26,7 +26,7 @@ class Route extends Controller{
 			if(isset($this->routes['*'])){
 				$rotaAtual=$this->routes['*'];
 			}else{
-				$this->notFound();
+				$this->fixServerBuiltIn();
 			}
 		}
 		// se a rota existe encaminhar pro controller
@@ -54,6 +54,17 @@ class Route extends Controller{
 		}else{
 			die($name.'->'.$method.' not found');
 		}
+	}
+	function fixServerBuiltIn(){
+		$relativeUrl=implode('/',$this->dirs());
+		$filename=ROOT.'/public/'.$relativeUrl;
+		if(file_exists($filename)){
+			$url=$_ENV['SITE_DOMAIN'];
+			$url.='/'.$relativeUrl;
+			$url.='?'.$_SERVER["QUERY_STRING"];
+			$this->redirect($url);
+		}
+		$this->notFound();
 	}
 	function getMethod($raw=false){
 		$method=@$_SERVER['REQUEST_METHOD'];
