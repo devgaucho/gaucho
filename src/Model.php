@@ -3,9 +3,9 @@ namespace Gaucho;
 use Gaucho\DB;
 class Model extends DB{
 	var $table;
-	function create($message){
-		$message['created_at']=time();
-		$this->db()->insert($this->table,$message);
+	function create($data){
+		$data['created_at']=time();
+		$this->db()->insert($this->table,$data);
 		return $this->db->id();
 	}
 	function readAll(){
