@@ -1,10 +1,13 @@
 /.buildpath
-/db/
 /.env
 /.idea
-/off
 /.project
 /.settings/
+/db/
+/js/inc/rotas.js
+/off
+/public/css/style.css
+/public/js/script.js
 /test*.php
 /todo.txt
 /vendor/

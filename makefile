@@ -1,13 +1,13 @@
-COMPOSER:= 	/usr/bin/composer
+COMPOSER:= 	composer
 JS_SOURCES := 	js/inc/jquery.js \
 	js/inc/rotas.js \
 	js/inc/jquery.js \
 	js/inc/chaplin.js \
 	js/inc/spa.js \
 	js/script.js
-LESS := 	/usr/bin/lessc
-PHP := 		/usr/bin/php
-UGLIFY := 	/usr/bin/uglifyjs.terser
+LESS := 	lessc
+PHP := 		php
+TERSER := 	terser
 clean:
 	rm -f public/css/style.css public/js/script.js
 dump:
@@ -18,12 +18,11 @@ mig:
 off:
 	touch off
 on:
-	$(LESS) $< $@ --clean-css
 	rm -f off
 public/css/style.css: less/style.less
 	$(LESS) $< $@ --clean-css
 public/js/script.js: $(JS_SOURCES)
-	$(UGLIFY) $^ --output $@ --compress
+	$(TERSER) $^ --output $@ --compress
 pull:
 	git pull origin main
 run:

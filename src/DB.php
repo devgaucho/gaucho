@@ -12,6 +12,7 @@ class DB{
 			// cria o diretório caso ele não exista
 			if(!file_exists($dir)){
 				if(mkdir($dir)){
+					chmod($dir,0777);
 					$msg='dir db criado com ';
 					$msg.='sucesso';
 					print $msg.PHP_EOL;
@@ -23,6 +24,7 @@ class DB{
 			}
 			// cria o banco caso ele não exista
 			system('touch '.$filename);
+			chmod($filename,0777);
 			if(file_exists($filename)){
 				$msg='db "'.$filename;
 				$msg.='" criado com sucesso'.PHP_EOL;
